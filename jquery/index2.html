@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GenC jQuery Activities</title>
+    <style>
+      body {
+        background-color: burlywood;
+        color: white;
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+      .box,
+      .animateBox,
+      .highlight,
+      .user-list {
+        margin: 10px auto;
+        width: 200px;
+        padding: 10px;
+        background: #fff;
+        color: #000;
+      }
+      .hidden {
+        display: none;
+      }
+      #progressBar {
+        width: 0%;
+        height: 20px;
+        background-color: green;
+        margin: 10px auto;
+      }
+      table,
+      td {
+        border: 1px solid white;
+        margin: 10px auto;
+      }
+      #userList {
+        list-style: none;
+        padding: 0;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>::GenC Registration Form::</h1>
+    <form id="regForm">
+      Enter FullName : <input type="text" name="fname" /><br /><br />
+      Enter Email : <input type="email" name="email" /><br /><br />
+      Enter Password:<input type="password" name="pwd" /><br /><br />
+      <input type="submit" value="submit" />
+    </form>
+
+    <hr />
+
+    <button id="changeBg">Change Background</button>
+    <button id="changeText">Change Paragraph</button>
+    <p id="dynamicText">Original paragraph text</p>
+
+    <input type="text" placeholder="Typing triggers alert" id="keyInput" />
+
+    <div class="box" id="dblClickBox">Double-click me</div>
+
+    <div class="box" id="slideBox">Click me to Expand/Collapse</div>
+    <div class="box hidden" id="slideContent">I slide!</div>
+
+    <button id="animateBtn">Move Me</button>
+    <div
+      class="animateBox"
+      style="width: 50px; height: 50px; background: red; position: relative"
+    ></div>
+
+    <ul id="nameList">
+      <li>John</li>
+      <li>Jane</li>
+      <li>Smith</li>
+      <li>Mary</li>
+    </ul>
+    <input type="text" id="filterInput" placeholder="Filter names..." />
+
+    <button id="fadeToggle">Toggle Image</button><br />
+    <img src="https://via.placeholder.com/150" id="fadeImg" />
+
+    <button id="fillProgress">Fill Progress</button>
+    <div id="progressBar"></div>
+
+    <button id="loadUsers">Load Users</button>
+    <ul id="userList"></ul>
+
+    <input type="text" id="searchInput" placeholder="Live Search" />
+    <ul id="searchResults"></ul>
+
+    <input type="password" id="passwordInput" placeholder="Enter password" />
+    <p id="strength"></p>
+
+    <input type="text" id="validateField" placeholder="Required" />
+    <input type="email" id="validateEmail" placeholder="Email" />
+    <p id="errorMsg"></p>
+
+    <script>
+      $(document).ready(function () {
+        // Activity 3: Background Color Change
+        $("#changeBg").click(() => $("body").css("background-color", "purple"));
+
+        // Activity 4: Change Text
+        $("#changeText").click(() =>
+          $("#dynamicText").text("Text changed dynamically!")
+        );
+
+        // Selectors
+        $("input").css("border", "2px solid black");
+        $("table tr:odd").css("background", "#ccc");
+        $("table tr:even").css("background", "#aaa");
+
+        // Events
+        $("#keyInput").on("keyup", function () {
+          alert("Typed: " + $(this).val());
+        });
+
+        $("#dblClickBox").on("dblclick", function () {
+          $(this).css("background-color", "yellow");
+        });
+
+        // Animations
+        $("#slideBox").click(() => $("#slideContent").slideToggle());
+
+        $("#animateBtn").click(function () {
+          $(".animateBox").animate({ left: "+=100px" }, 1000);
+        });
+
+        // Traversing
+        $("#nameList li:first").css("color", "green");
+        $("#nameList li:last").css("color", "red");
+
+        $("#filterInput").on("keyup", function () {
+          const val = $(this).val().toLowerCase();
+          $("#nameList li").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().includes(val));
+          });
+        });
+
+        // Effects
+        $("#fadeToggle").click(() => $("#fadeImg").fadeToggle());
+
+        $("#fillProgress").click(function () {
+          $("#progressBar").animate({ width: "100%" }, 2000);
+        });
+
+        // AJAX
+        $("#loadUsers").click(() => {
+          $.get("https://jsonplaceholder.typicode.com/users", function (data) {
+            $("#userList").empty();
+            data.forEach((user) =>
+              $("#userList").append(`<li>${user.name}</li>`)
+            );
+          });
+        });
+
+        $("#searchInput").on("keyup", function () {
+          const query = $(this).val().toLowerCase();
+          $.get("https://jsonplaceholder.typicode.com/users", function (data) {
+            const results = data.filter((user) =>
+              user.name.toLowerCase().includes(query)
+            );
+            $("#searchResults").empty();
+            results.forEach((u) =>
+              $("#searchResults").append(`<li>${u.name}</li>`)
+            );
+          });
+        });
+
+        // Validation
+        $("#passwordInput").on("input", function () {
+          const val = $(this).val();
+          let msg = "Weak";
+          if (val.length > 8 && /[A-Z]/.test(val) && /\d/.test(val))
+            msg = "Strong";
+          else if (val.length > 5) msg = "Medium";
+          $("#strength").text(`Password Strength: ${msg}`);
+        });
+
+        $("#validateField, #validateEmail").on("input", function () {
+          const required = $("#validateField").val();
+          const email = $("#validateEmail").val();
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!required) {
+            $("#errorMsg").text("Required field is empty!");
+          } else if (!emailRegex.test(email)) {
+            $("#errorMsg").text("Invalid email format!");
+          } else {
+            $("#errorMsg").text("All fields are valid!");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

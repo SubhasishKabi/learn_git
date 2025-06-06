@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .box {
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+        display: inline-block;
+      }
+      .faq {
+        cursor: pointer;
+        color: blue;
+      }
+      .answer {
+        display: none;
+        margin-bottom: 10px;
+      }
+      body {
+        background-color: lightgray;
+        width: 80%;
+        margin: 0 auto;
+      }
+      * {
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Section 1: jQuery Setup & Button</h2>
+    <button id="changeTextBtn">Click me to change paragraph text</button>
+    <p id="textToChange">This is a paragraph.</p>
+
+    <h2>Section 2: Selectors</h2>
+    <p>First paragraph</p>
+    <p>Second paragraph</p>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+
+    <h2>Section 3: Event Handling</h2>
+    <button id="alertBtn">Click me</button>
+    <p id="hoverText">Hover over me!</p>
+
+    <h2>Section 4: Animations</h2>
+    <button id="fadeBtn">Fade Out Image</button>
+    <img
+      id="imgToFade"
+      src="https://www.playmakerstats.com/img/jogadores/new/15/79/1579_cristiano_ronaldo_20250121144448.png" style="height: 200px;"
+      alt="Placeholder Image"
+    />
+
+    <h3>Collapsible Menu</h3>
+    <button id="menuToggle">Toggle Menu</button>
+    <div id="menuContent" style="display: none">
+      This is a collapsible menu!
+    </div>
+
+    <!-- Section 5: DOM Traversing -->
+    <h2>Section 5: DOM Traversing</h2>
+    <div id="parentDiv" style="padding: 10px">
+      <span>This is a span inside a div</span>
+    </div>
+    <div>
+      <p id="sibling1">I am the first sibling</p>
+      <p id="sibling2">I am the next sibling</p>
+    </div>
+
+    <h2>Section 6: Effects</h2>
+    <button id="hidePara">Hide Paragraph</button>
+    <button id="showPara">Show Paragraph</button>
+    <p id="togglePara">This paragraph will be hidden or shown</p>
+
+    <div class="faq">What is jQuery?</div>
+    <div class="answer">
+      jQuery is a fast, small, and feature-rich JavaScript library.
+    </div>
+    <div class="faq">Why use jQuery?</div>
+    <div class="answer">
+      It simplifies DOM manipulation, event handling, and AJAX.
+    </div>
+
+    <h2>Section 7: AJAX</h2>
+    <button id="fetchDataBtn">Fetch Data</button>
+    <div id="apiData"></div>
+
+    <h3>Submit Name</h3>
+    <form id="nameForm">
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="Enter name"
+      />
+      <button type="submit">Submit</button>
+    </form>
+    <div id="postResult"></div>
+
+    <h2>Section 8: Form Validation</h2>
+    <form id="validateForm">
+      <input
+        type="text"
+        id="requiredField"
+        placeholder="Required Field"
+      /><br />
+      <input type="text" id="emailField" placeholder="Enter Email" /><br />
+      <button type="submit">Validate</button>
+    </form>
+    <div id="validationMessage"></div>
+
+    <script>
+      //alert message
+      $(document).ready(function () {
+        alert("Page loaded!");
+        $("#changeTextBtn").click(function () {
+          $("#textToChange").text("Text has been changed!");
+        });
+
+        // Section 2
+        $("p").css("color", "blue");
+        $(".box").css("background-color", "orange");
+
+        // Section 3
+        $("#alertBtn").click(() => alert("Button clicked!"));
+        $("#hoverText").hover(
+          function () {
+            $(this).text("Mouse is over me!");
+          },
+          function () {
+            $(this).text("Hover over me!");
+          }
+        );
+
+        // Section 4
+        $("#fadeBtn").click(() => $("#imgToFade").fadeOut());
+        $("#menuToggle").click(() => $("#menuContent").slideToggle());
+
+        // Section 5
+        $("span").parent().css("background-color", "#d4f0fc");
+        $("#sibling1").next().css("font-weight", "bold");
+
+        // Section 6
+        $("#hidePara").click(() => $("#togglePara").hide());
+        $("#showPara").click(() => $("#togglePara").show());
+        $(".faq").click(function () {
+          $(this).next(".answer").slideToggle();
+        });
+
+        // Section 7
+        $("#fetchDataBtn").click(function () {
+          $.get(
+            "https://jsonplaceholder.typicode.com/posts/1",
+            function (data) {
+              $("#apiData").html(
+                `<strong>${data.title}</strong><p>${data.body}</p>`
+              );
+            }
+          );
+        });
+
+        $("#nameForm").submit(function (e) {
+          e.preventDefault();
+          const name = $("#username").val();
+          $.post(
+            "https://jsonplaceholder.typicode.com/posts",
+            { name: name },
+            function (response) {
+              $("#postResult").text(`Submitted: ${response.name}`);
+            }
+          );
+        });
+
+        // Section 8
+        $("#validateForm").submit(function (e) {
+          e.preventDefault();
+          const required = $("#requiredField").val();
+          const email = $("#emailField").val();
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!required) {
+            $("#validationMessage").text("Required field is empty!");
+          } else if (!emailRegex.test(email)) {
+            $("#validationMessage").text("Invalid email format!");
+          } else {
+            $("#validationMessage").text("Form is valid!");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
