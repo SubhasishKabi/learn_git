@@ -1,0 +1,8 @@
+CREATE TABLE student (
+    eid INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    department VARCHAR(50),
+    course VARCHAR(100),
+    year INT,
+    email VARCHAR(100)
+);

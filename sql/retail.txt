@@ -1,0 +1,28 @@
+CREATE TABLE sales (
+    sale_id NUMBER PRIMARY KEY,
+    customer_name VARCHAR2(50),
+    product_name VARCHAR2(50),
+    quantity NUMBER,
+    sale_date DATE,
+    total_amount NUMBER
+);
+
+
+INSERT INTO sales (
+    sale_id, customer_name, product_name, quantity, sale_date, total_amount
+) VALUES (
+    101, 'John Doe', 'Laptop', 1, TO_DATE('2025-06-09', 'YYYY-MM-DD'), 75000
+);
+
+
+UPDATE sales
+SET quantity = 2,
+    total_amount = 150000
+WHERE sale_id = 101;
+
+
+DELETE FROM sales
+WHERE sale_id = 101;
+
+
+SELECT * FROM sales;

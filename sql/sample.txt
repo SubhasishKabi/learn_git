@@ -1,0 +1,80 @@
+
+-- 1. Create employees table
+CREATE TABLE employees (
+    employee_id NUMBER PRIMARY KEY,
+    employee_name VARCHAR2(100),
+    department VARCHAR2(50),
+    salary NUMBER
+);
+
+-- 2. Create products table
+CREATE TABLE products (
+    product_id NUMBER PRIMARY KEY,
+    product_name VARCHAR2(100),
+    price NUMBER,
+    supplier_id NUMBER
+);
+
+-- 3. Create customers table
+CREATE TABLE customers (
+    customer_id NUMBER PRIMARY KEY,
+    customer_name VARCHAR2(100),
+    email VARCHAR2(100)
+);
+
+-- 4. Create orders table
+CREATE TABLE orders (
+    order_id NUMBER PRIMARY KEY,
+    customer_id NUMBER,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+-- 5. Create projects table
+CREATE TABLE projects (
+    project_id NUMBER PRIMARY KEY,
+    employee_id NUMBER,
+    project_name VARCHAR2(100),
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+
+-- 6. Create suppliers table
+CREATE TABLE suppliers (
+    supplier_id NUMBER PRIMARY KEY,
+    supplier_name VARCHAR2(100)
+);
+
+
+
+-- 1. Fetch employee details from a sample database:
+SELECT * FROM employees;
+
+
+-- 2. Sort product prices in ascending order:
+SELECT product_name, price
+FROM products
+ORDER BY price ASC;
+
+
+-- 3. Find customers whose names begin with 'J':
+SELECT *
+FROM customers
+WHERE customer_name LIKE 'J%';
+
+
+-- 4. INNER JOIN: Link customers and their orders:
+SELECT c.customer_id, c.customer_name, o.order_id, o.order_date
+FROM customers c
+INNER JOIN orders o ON c.customer_id = o.customer_id;
+
+
+-- 5. LEFT JOIN: All employees with their assigned projects:
+SELECT e.employee_id, e.employee_name, p.project_name
+FROM employees e
+LEFT JOIN projects p ON e.employee_id = p.employee_id;
+
+
+-- 6. FULL OUTER JOIN: Combine suppliers and products:
+SELECT s.supplier_id, s.supplier_name, p.product_name
+FROM suppliers s
+FULL OUTER JOIN products p ON s.supplier_id = p.supplier_id;
